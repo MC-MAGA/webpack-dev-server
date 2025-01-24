@@ -99,7 +99,7 @@ const tests = {
         },
       },
       {
-        webSocketURL: { username: "zoro", password: "roronoa" },
+        webSocketURL: { username: "username", password: "password" },
       },
     ],
     failure: [
@@ -436,6 +436,16 @@ const tests = {
         },
       },
     ],
+  },
+  app: {
+    success: [
+      () => require("connect")(),
+      async () =>
+        new Promise((resolve) => {
+          resolve(require("connect")());
+        }),
+    ],
+    failure: ["test", false],
   },
   static: {
     success: [

@@ -2,6 +2,70 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0](https://github.com/webpack/webpack-dev-server/compare/v5.1.0...v5.2.0) (2024-12-11)
+
+
+### Features
+
+* added `getClientEntry` and `getClientHotEntry` methods to get clients entries ([dc642a8](https://github.com/webpack/webpack-dev-server/commit/dc642a832d45c23c5c7a08fbf29995e0db7e0d95))
+
+
+### Bug Fixes
+
+* speed up initial client bundling ([145b5d0](https://github.com/webpack/webpack-dev-server/commit/145b5d01610a16468fc32719a20366682b0e8572))
+
+## [5.1.0](https://github.com/webpack/webpack-dev-server/compare/v5.0.4...v5.1.0) (2024-09-03)
+
+
+### Features
+
+* add visual progress indicators ([a8f40b7](https://github.com/webpack/webpack-dev-server/commit/a8f40b74e6439a8281b9fe8868eb9db7e4c5de50))
+* added the `app` option to be `Function` (by default only with `connect` compatibility frameworks) ([3096148](https://github.com/webpack/webpack-dev-server/commit/3096148746c906105c4424352f5b5ad1bff0fd4f))
+* allow the `server` option to be `Function` ([#5275](https://github.com/webpack/webpack-dev-server/issues/5275)) ([02a1c6d](https://github.com/webpack/webpack-dev-server/commit/02a1c6d788f5fc47c11cc7d910fd1b5e17aed886))
+* http2 support for `connect` and `connect` compatibility frameworks which support HTTP2 ([#5267](https://github.com/webpack/webpack-dev-server/issues/5267)) ([6509a3f](https://github.com/webpack/webpack-dev-server/commit/6509a3fd3eb5decb61f60a9f2db97d76f71ecb99))
+
+
+### Bug Fixes
+
+* check the `platform` property to determinate the target ([#5269](https://github.com/webpack/webpack-dev-server/issues/5269)) ([c3b532c](https://github.com/webpack/webpack-dev-server/commit/c3b532c6360317319793dcda22c76fbfc05fbdcf))
+* ipv6 output ([#5270](https://github.com/webpack/webpack-dev-server/issues/5270)) ([06005e7](https://github.com/webpack/webpack-dev-server/commit/06005e7cb99e4c412b968ed3fb786acfb8c2e037))
+* replace `rimraf` with `rm` ([#5162](https://github.com/webpack/webpack-dev-server/issues/5162)) ([1a1561f](https://github.com/webpack/webpack-dev-server/commit/1a1561f09bdfa7a98434d7d9cd62e323b887dfbf))
+* replace default gateway ([#5255](https://github.com/webpack/webpack-dev-server/issues/5255)) ([f5f0902](https://github.com/webpack/webpack-dev-server/commit/f5f09024ff4fe6625aa94bcd69439462d74013f0))
+* support `devServer: false` ([#5272](https://github.com/webpack/webpack-dev-server/issues/5272)) ([8b341cb](https://github.com/webpack/webpack-dev-server/commit/8b341cb8c1dc01cef62c70959620cd0cbd87fee7))
+
+### [5.0.4](https://github.com/webpack/webpack-dev-server/compare/v5.0.3...v5.0.4) (2024-03-19)
+
+
+### Bug Fixes
+
+* **security:** bump webpack-dev-middleware ([#5112](https://github.com/webpack/webpack-dev-server/issues/5112)) ([aab576a](https://github.com/webpack/webpack-dev-server/commit/aab576a9e4930a1731e8b0380c859552fc9a6e11))
+
+### [5.0.3](https://github.com/webpack/webpack-dev-server/compare/v5.0.2...v5.0.3) (2024-03-12)
+
+
+### Bug Fixes
+
+* **types:** proxy ([#5101](https://github.com/webpack/webpack-dev-server/issues/5101)) ([6e1aed3](https://github.com/webpack/webpack-dev-server/commit/6e1aed30ffd6456935b4fe22851cd560b0eae176))
+
+### [5.0.2](https://github.com/webpack/webpack-dev-server/compare/v5.0.1...v5.0.2) (2024-02-16)
+
+
+### Bug Fixes
+
+* types ([#5057](https://github.com/webpack/webpack-dev-server/issues/5057)) ([da2c24d](https://github.com/webpack/webpack-dev-server/commit/da2c24ddd92198a1337553457eedcece6af38195))
+
+### [5.0.1](https://github.com/webpack/webpack-dev-server/compare/v5.0.0...v5.0.1) (2024-02-13)
+
+
+### Bug Fixes
+
+* avoid using eval in client ([#5045](https://github.com/webpack/webpack-dev-server/issues/5045)) ([7681477](https://github.com/webpack/webpack-dev-server/commit/76814771dcebe80628b4462f5e1d30064ae226d5))
+* overlay and `require-trusted-types-for` ([#5046](https://github.com/webpack/webpack-dev-server/issues/5046)) ([e115436](https://github.com/webpack/webpack-dev-server/commit/e11543677120b004d1f20e11fdf34c07897c7b0c))
+
+## [5.0.0](https://github.com/webpack/webpack-dev-server/compare/v4.15.1...v5.0.0) (2024-02-12)
+
+[Migration Guide and Changes](https://github.com/webpack/webpack-dev-server/blob/master/migration-v5.md).
+
 ### [4.15.1](https://github.com/webpack/webpack-dev-server/compare/v4.15.0...v4.15.1) (2023-06-09)
 
 

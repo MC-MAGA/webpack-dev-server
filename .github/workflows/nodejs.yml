@@ -59,8 +59,9 @@ jobs:
       - name: Security audit
         run: npm audit --production
 
-      - name: Check commit message
-        uses: wagoid/commitlint-github-action@v5
+      - name: Validate PR commits with commitlint
+        if: github.event_name == 'pull_request'
+        run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
   test:
     name: Test - ${{ matrix.os }} - Node v${{ matrix.node-version }}, Webpack ${{ matrix.webpack-version }} (${{ matrix.shard }})
@@ -68,7 +69,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [18.x, 20.x, 21.x]
+        node-version: [18.x, 20.x, 22.x, 23.x]
         shard: ["1/4", "2/4", "3/4", "4/4"]
         webpack-version: [latest]
 
@@ -90,6 +91,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install dependencies for Node.js@18
+        run: |
+          npm i p-retry@^4.5.0 open@^8.0.9
+          node ./scripts/prepare-test-for-old-node.js
+        if: matrix.node-version == '18.x'
+
       - name: Setup firefox
         if: matrix.os != 'windows-latest'
         uses: browser-actions/setup-firefox@latest
@@ -99,15 +106,20 @@ jobs:
       - name: Link webpack-dev-server
         run: |
           cp -R client tmp-client
-          npm link --ignore-scripts
-          npm link webpack-dev-server --ignore-scripts
+          npm link --ignore-scripts || true
+          npm link webpack-dev-server --ignore-scripts || true
           rm -r client
           cp -R tmp-client client
 
       - name: Run tests for webpack version ${{ matrix.webpack-version }}
+        run: node_modules/.bin/jest --coverage --ci --shard=${{ matrix.shard }}
+        if: matrix.node-version == '18.x'
+
+      - name: Run tests for webpack version ${{ matrix.webpack-version }}
         run: npm run test:coverage -- --ci --shard=${{ matrix.shard }}
+        if: matrix.node-version != '18.x'
 
       - name: Submit coverage data to codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

@@ -27,7 +27,7 @@ const proxyOptionPathsAsProperties = [
   {
     context: "/foo",
     bypass(req) {
-      if (/\.html$/.test(req.path)) {
+      if (/\.html$/.test(req.path || req.url)) {
         return "/index.html";
       }
 
@@ -37,7 +37,7 @@ const proxyOptionPathsAsProperties = [
   {
     context: "proxyfalse",
     bypass(req) {
-      if (/\/proxyfalse$/.test(req.path)) {
+      if (/\/proxyfalse$/.test(req.path || req.url)) {
         return false;
       }
     },
@@ -45,7 +45,7 @@ const proxyOptionPathsAsProperties = [
   {
     context: "/proxy/async",
     bypass(req, res) {
-      if (/\/proxy\/async$/.test(req.path)) {
+      if (/\/proxy\/async$/.test(req.path || req.url)) {
         return new Promise((resolve) => {
           setTimeout(() => {
             res.end("proxy async response");
@@ -61,7 +61,7 @@ const proxyOptionPathsAsProperties = [
     changeOrigin: true,
     secure: false,
     bypass(req) {
-      if (/\.(html)$/i.test(req.url)) {
+      if (/\.(html)$/i.test(req.path || req.url)) {
         return req.url;
       }
     },
@@ -95,10 +95,16 @@ const proxyOptionOfArray = [
       target: `http://localhost:${port2}`,
       pathRewrite: { "^/api": "" },
       bypass: () => {
-        if (req && req.query.foo) {
-          res.end(`foo+${next.name}+${typeof next}`);
+        if (req) {
+          const resolveUrl = new URL(req.url, `http://${req.headers.host}`);
+          const params = new URLSearchParams(resolveUrl.search);
+          const foo = params.get("foo");
 
-          return false;
+          if (foo) {
+            res.end(`foo+${next.name}+${typeof next}`);
+
+            return false;
+          }
         }
       },
     };
@@ -230,15 +236,23 @@ describe("proxy option", () => {
       it("should log deprecation warning when bypass is used", async () => {
         const utilSpy = jest.spyOn(util, "deprecate");
 
-        expect(utilSpy.mock.calls[0][1]).toEqual(
-          "Using the 'bypass' option is deprecated. Please use the 'router' and 'context' options. Read more at https://github.com/chimurai/http-proxy-middleware/tree/v2.0.6#http-proxy-middleware-options",
+        const response = await req.get("/foo/bar.html");
+
+        expect(response.status).toEqual(200);
+        expect(response.text).toContain("Hello");
+
+        const lastCall = utilSpy.mock.calls[utilSpy.mock.calls.length - 1];
+
+        expect(lastCall[1]).toEqual(
+          "Using the 'bypass' option is deprecated. Please use the 'router' or 'context' options. Read more at https://github.com/chimurai/http-proxy-middleware/tree/v2.0.6#http-proxy-middleware-options",
         );
-        expect(utilSpy.mock.calls[0][2]).toEqual(
+        expect(lastCall[2]).toEqual(
           "DEP_WEBPACK_DEV_SERVER_PROXY_BYPASS_ARGUMENT",
         );
 
         utilSpy.mockRestore();
       });
+
       it("can rewrite a request path", async () => {
         const response = await req.get("/foo/bar.html");
 
